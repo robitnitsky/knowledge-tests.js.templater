@@ -9,30 +9,26 @@ const { JSDOM } = jsdom;
 const templater = require('./src/templater.js');
 
 module.exports = (options) => {
-    // Какие-то действия с опциями. Например, проверка их существования,
-    // задание значения по умолчанию и т.д.
-
+    
     return through2(function (file, enc, cb) {
-        // Если файл не существует
+
         if (file.isNull()) {
             cb(null, file);
             return;
         }
 
-        // Если файл представлен потоком
         if (file.isStream()) {
             cb(new gutil.PluginError('gulp-example-plugin', 'Streaming not supported'));
             return;
         }
-
+        // define virtual DOM
         const dom = new JSDOM(file.contents.toString('utf8'));
+        // define document from virtual DOM
         const virtualDocument = dom.window.document;
 
-        templater.init(virtualDocument, options);
-
+        // change content of file with result of templater
         file.contents = new Buffer(templater.init(virtualDocument, options));
 
-        // Возвращаем обработанный файл для следующего плагина
         this.push(file);
         cb();
     });
