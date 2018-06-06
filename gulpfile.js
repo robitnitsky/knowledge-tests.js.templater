@@ -1,14 +1,15 @@
-var gulp = require('gulp'),
-    mochaPhantomJS = require('gulp-mocha-phantomjs'),
-    amountOfStages = 10;
+const gulp = require('gulp');
+const through2 = require('through2').obj;
+const htmlbeautify = require('gulp-html-beautify');
+const gulpTemplater = require('./g_templater.js');
 
-for (var i = 1; i < amountOfStages; i++) {
-    (function () {
-        var j = i;
-        gulp.task('test-stage-' + j, function () {
-            return gulp
-                .src('spec/stage-' + j + '/index.html')
-                .pipe(mochaPhantomJS());
-        });
-    })();
-}
+gulp.task('build', function () {
+    gulp.src('spec/stage-8/*.html')
+        .pipe(gulpTemplater({
+            tags: {
+                'panel': '<div class="panel"><div class="panel-heading">{{heading}}</div><div class="panel-body">{{html}}</div></div>'
+            }
+        }))
+        .pipe(htmlbeautify())
+        .pipe(gulp.dest('public'))
+})
