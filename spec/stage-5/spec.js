@@ -22,7 +22,7 @@ describe("Stage 5", function() {
 
     it("must replace element with tag `panel` to element with tag 'div', class 'panel', and innerHtml", function() {
         var replacedElements = $('#bootstrap-templates .panel');
-        replacedElements.length.should.equals(3, 'Element with `panel` tag was not created. Amount of `panel` elements in DOM');        
+        replacedElements.length.should.equals(3, 'Element with `panel` tag was not created. Amount of `panel` elements in DOM');
         [].forEach.call(replacedElements, function(element){
             let elementHeading = $(element).find('> .panel-heading');
             elementHeading.length.should.equal(1, 'Element with class `panel-heading` was not created')
