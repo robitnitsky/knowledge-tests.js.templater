@@ -1,15 +1,10 @@
-// const gulp = require('gulp');
-// const jsmin = require('gulp-jsmin');
-// const rename = require('gulp-rename');
-
 const through2 = require('through2').obj;
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
-
 const templater = require('./src/templater.js');
 
 module.exports = (options) => {
-    
+
     return through2(function (file, enc, cb) {
 
         if (file.isNull()) {
@@ -21,6 +16,7 @@ module.exports = (options) => {
             cb(new gutil.PluginError('gulp-example-plugin', 'Streaming not supported'));
             return;
         }
+
         // define virtual DOM
         const dom = new JSDOM(file.contents.toString('utf8'));
         // define document from virtual DOM
