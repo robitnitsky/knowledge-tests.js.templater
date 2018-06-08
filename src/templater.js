@@ -1,14 +1,10 @@
 (() => {
     const Templater = {
-        // function to launch rendering
-        // function takes object with templates
-        init: function (virtualDocument, options) {
-            const tags = options.tags;
-            return this.output(virtualDocument, tags, this);
+
+        init: function (parentDOM, options) {
+            return this.output(parentDOM.documentElement, options.tags);
         },
 
-        // function to get parameters from template string
-        // function takes template like string
         getTemplateParameters: function (template) {
             const templateParameter = /\{\{(\w+?)\}\}/ig;
             let execResults;
@@ -19,41 +15,34 @@
             return templateParameters;
         },
 
-        // function to render new template string with current value of parameters {{...}}
-        // function takes array with template parameters, current template and elemnt we want to be replaced
-        render: function (templateParameters, renderedTemplate, element) {
-            for (let i = 0; i < templateParameters.length; i++) {
-                let tempStr = '{{' + templateParameters[i] + '}}';
-                if (templateParameters[i] !== 'html') {
-                    renderedTemplate = renderedTemplate.replace(tempStr, element.getAttribute(templateParameters[i]));
+        render: function (renderedTemplate, element) {
+            let templateParameters = this.getTemplateParameters(renderedTemplate);
+            templateParameters.forEach(function(parameter){
+                if (parameter !== 'html') {
+                    renderedTemplate = renderedTemplate.replace(`{{${parameter}}}`, element.getAttribute(parameter));
                 } else {
-                    renderedTemplate = renderedTemplate.replace(tempStr, element.innerHTML);
+                    renderedTemplate = renderedTemplate.replace(`{{${parameter}}}`, element.innerHTML);
                 }
-            }
+            });
             return renderedTemplate;
         },
 
-        // function to replace custom element with ready template
-        // function takes element we want to be replaced and ready template like string
         replaceElement: function (element, renderedTemplate) {
             element.outerHTML = renderedTemplate;
         },
 
-        // function to output new valid element to HTML
-        // function takes array of holders and object with templates
-        output: function (virtualDocument, tags, thisArg) {
+        output: function (parentDOM, tags) {
+            let self = this;
             for (let key in tags) {
-                let elementsHtml = virtualDocument.getElementsByTagName(key);
-                let templateParameters = this.getTemplateParameters(tags[key]);
+                let elementsHtml = parentDOM.querySelectorAll(key);
                 [].forEach.call(elementsHtml, function (element) {
-                    if (element.getElementsByTagName(key) > 0) {
-                        thisArg.output(element, tags, thisArg);
+                    if (element.querySelectorAll(Object.keys(tags).join(',')).length) {
+                        self.output(element, tags);
                     }
-                    let renderedTemplate = thisArg.render(templateParameters, tags[key], element);
-                    thisArg.replaceElement(element, renderedTemplate);
+                    self.replaceElement(element, self.render(tags[key], element));
                 })
             }
-            return virtualDocument.documentElement.outerHTML;
+            return parentDOM.outerHTML;
         }
     }
 

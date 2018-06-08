@@ -7,7 +7,8 @@ gulp.task('build', function () {
     gulp.src('spec/stage-8/*.html')
         .pipe(gulpTemplater({
             tags: {
-                'panel': '<div class="panel"><div class="panel-heading">{{heading}}</div><div class="panel-body">{{html}}</div></div>'
+                'customButton': '<button class="btn btn-default {{class}}" type="{{type}}">{{html}}</button>',
+                'panel': '<div class="panel"><div class="panel-heading">{{heading}}</div><div class="panel-body">{{html}}</div></div>',
             }
         }))
         .pipe(htmlbeautify())
