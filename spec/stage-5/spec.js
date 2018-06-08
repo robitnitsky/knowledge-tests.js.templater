@@ -7,7 +7,7 @@ describe("Stage 5", function() {
         $('#bootstrap-templates button').length.should.equals(1);
         $('#bootstrap-templates').templater({
             tags: {
-                'button': '<button class="btn btn-default {{class}}" type="{{type}}">{{html}}</button>',
+                'bootstrapbutton': '<button class="btn btn-default {{class}}" type="{{type}}">{{html}}</button>',
                 'panel': '<div class="panel"><div class="panel-heading">{{heading}}</div><div class="panel-body">{{html}}</div></div>'
             }
         });
@@ -34,7 +34,7 @@ describe("Stage 5", function() {
         $('#foundation-templates button').length.should.equals(1);
         $('#foundation-templates').templater({
             tags: {
-                'button': '<button class="button {{class}}" type="{{type}}">{{html}}</button>'
+                'foundationbutton': '<button class="button {{class}}" type="{{type}}">{{html}}</button>'
             }
         });
 

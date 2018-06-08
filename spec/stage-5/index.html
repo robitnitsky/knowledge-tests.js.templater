@@ -21,7 +21,7 @@
     <div id="mocha"></div>
 
     <section id="bootstrap-templates">
-        <button type="submit" class="bootstrap">Some Text</button>
+        <bootstrapbutton type="submit" class="bootstrap">Some Text</bootstrapbutton>
         <panel heading="Outer Panel">
             <div>Some outer content</div>
             <panel heading="Inner Panel">
@@ -33,15 +33,29 @@
         </panel>
     </section>
     <section id="foundation-templates">
-        <button type="submit" class="foundation">Some Text</button>
+        <foundationbutton type="submit" class="foundation">Some Text</foundationbutton>
     </section>
 
+    <script src="../../src/templater.js"></script>
     <script src="../../src/templater.jq.js"></script>
     <script src="spec.js"></script>
     <script>
         //if (navigator.userAgent.indexOf('PhantomJS') === -1) {
-        mocha.run();
+        // mocha.run();
     //}
+    </script>
+    <script>
+        $('#bootstrap-templates').templater({
+            tags: {
+                'bootstrapbutton': '<button class="btn btn-default {{class}}" type="{{type}}">{{html}}</button>',
+                'panel': '<div class="panel"><div class="panel-heading">{{heading}}</div><div class="panel-body">{{html}}</div></div>'
+            }
+        });
+        $('#foundation-templates').templater({
+            tags: {
+                'foundationbutton': '<button class="button {{class}}" type="{{type}}">{{html}}</button>'
+            }
+        });
     </script>
 </body>
 
