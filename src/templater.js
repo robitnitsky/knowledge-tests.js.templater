@@ -33,17 +33,16 @@
 
         output: function (parentNode, tags) {
             let self = this;
-            console.log(parentNode);
             if (parentNode.documentElement) {
                 parentNode = parentNode.documentElement;
             }
             for (let key in tags) {
                 let elementsHtml = parentNode.querySelectorAll(key);
                 [].forEach.call(elementsHtml, function (element) {
-                    if (element.querySelectorAll(Object.keys(tags).join(',')).length) {
-                        self.output(element, tags);
-                    }
                     self.replaceElement(element, self.render(tags[key], element));
+                    if (parentNode.querySelectorAll(Object.keys(tags).join(',')).length) {
+                        self.output(parentNode, tags);
+                    }
                 })
             }
             return parentNode.outerHTML;
